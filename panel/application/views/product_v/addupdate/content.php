@@ -1,17 +1,19 @@
 <?php 
 	if(isset($items))
 	{
-		foreach($items as $item)
+		foreach($product_language as $language)
 		{
-			if($item->product_language == 1)
+			foreach($items as $item)
 			{
-				$item1= $item;
-			}
-			else if($item->product_language == 2)
-			{
-				$item2 = $item;
+				if($item->product_language == $language->id)
+				{
+					$dynamicVariableName = 'item' . $language->id;
+        			$$dynamicVariableName = $item;
+				}
+			
 			}
 		}
+		
 	}
 ?>
 <section class="app-content">
@@ -53,137 +55,73 @@
 								</ul><!-- .nav-tabs -->
 								<!-- Tab panes -->
 								<div class="tab-content p-md">
-								
-													
-											<div role="tabpanel" class="tab-pane in active fade tr_container" id="tab-1">
+										<?php foreach($product_language as $language): ?>
+											<?php $dynamicVariableName = 'item' . $language->id; ?>
+											<div role="tabpanel" class="tab-pane in active fade <?php echo $language->title ?>_container" id="tab-1">
 												<div class="row">
 													<div class="col-md-6 form-group <?php echo (isset($form_error) ? (empty(set_value("product_title")) ? "has-error" :"") : "") ?>" >
-														<label for="product_title"><span class="text-danger">*</span>Türkçe Ürün Başlık</label>
-														<input type="text" class="form-control" id="product_title" name="product_title" value="<?php echo isset($form_error) ? set_value("product_title") : ((isset($item1->product_title)) ? $item1->product_title : "") ?>">
+														<label for="<?php echo $language->title  ?>_product_title"><span class="text-danger">*</span>Türkçe Ürün Başlık</label>
+														<input type="text" class="form-control" id="<?php echo $language->title  ?>_product_title" name="<?php echo $language->title  ?>_product_title" value="<?php echo isset($form_error) ? set_value("{$language->title}_product_title") : ((isset($$dynamicVariableName->product_title)) ? $$dynamicVariableName->product_title : "") ?>">
 														<?php if(isset($form_error)): ?>
-														<small class="text-danger"><?php echo form_error("product_title"); ?></small>
+														<small class="text-danger"><?php echo form_error("{$language->title}_product_title"); ?></small>
 														<?php endif; ?>
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-md-6 form-group" >
-														<label for="product_info_title">Türkçe Ürün Ek Bilgi Başlığı</label>
-														<input type="text" class="form-control" id="product_info_title" name="product_info_title" value="<?php echo isset($form_error) ? set_value("product_info_title") : ((isset($item1->product_info_title)) ? $item1->product_info_title : "") ?>">
+														<label for="<?php echo $language->title  ?>_product_info_title">Türkçe Ürün Ek Bilgi Başlığı</label>
+														<input type="text" class="form-control" id="<?php echo $language->title  ?>_product_info_title" name="<?php echo $language->title  ?>_product_info_title" value="<?php echo isset($form_error) ? set_value("{$language->title}_product_info_title") : ((isset($$dynamicVariableName->product_info_title)) ? $$dynamicVariableName->product_info_title : "") ?>">
 													
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-md-6 form-group " >
-														<label for="product_info_description">Türkçe Ürün Ek Bilgi Açıklaması</label>
-														<input type="text" class="form-control" id="product_info_description" name="product_info_description" value="<?php echo isset($form_error) ? set_value("product_info_description") : ((isset($item1->product_info_description)) ? $item1->product_info_description : "") ?>">
+														<label for="<?php echo $language->title  ?>_product_info_description">Türkçe Ürün Ek Bilgi Açıklaması</label>
+														<input type="text" class="form-control" id="<?php echo $language->title  ?>_product_info_description" name="<?php echo $language->title  ?>_product_info_description" value="<?php echo isset($form_error) ? set_value("{$language->title}_product_info_description") : ((isset($$dynamicVariableName->product_info_description)) ? $$dynamicVariableName->product_info_description : "") ?>">
 														
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-md-6 form-group" >
-														<label for="product_meta_title">Türkçe Meta Title</label>
-														<input type="text" class="form-control" id="product_meta_title" name="product_meta_title" value="<?php echo isset($form_error) ? set_value("product_meta_title") : ((isset($item1->product_meta_title)) ? $item1->product_meta_title : "") ?>">
+														<label for="<?php echo $language->title  ?>_product_meta_title">Türkçe Meta Title</label>
+														<input type="text" class="form-control" id="<?php echo $language->title  ?>_product_meta_title" name="<?php echo $language->title  ?>_product_meta_title" value="<?php echo isset($form_error) ? set_value("{$language->title}_product_meta_title") : ((isset($$dynamicVariableName->product_meta_title)) ? $$dynamicVariableName->product_meta_title : "") ?>">
 													
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-md-6 form-group " >
-														<label for="product_meta_keywords">Türkçe Meta Keywords</label>
-														<input type="text" class="form-control" id="product_meta_keywords" name="product_meta_keywords" value="<?php echo isset($form_error) ? set_value("product_meta_keywords") : ((isset($item1->product_meta_keywords)) ? $item1->product_meta_keywords : "") ?>">
+														<label for="<?php echo $language->title  ?>_product_meta_keywords">Türkçe Meta Keywords</label>
+														<input type="text" class="form-control" id="<?php echo $language->title  ?>_product_meta_keywords" name="<?php echo $language->title  ?>_product_meta_keywords" value="<?php echo isset($form_error) ? set_value("{$language->title}_product_meta_keywords") : ((isset($$dynamicVariableName->product_meta_keywords)) ? $$dynamicVariableName->product_meta_keywords : "") ?>">
 													
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-md-6 form-group " >
-														<label for="product_meta_description">Türkçe Meta Description</label>
-														<input type="text" class="form-control" id="product_meta_description" name="product_meta_description" value="<?php echo isset($form_error) ? set_value("product_meta_description") : ((isset($item1->product_meta_description)) ? $item1->product_meta_description : "") ?>">
+														<label for="<?php echo $language->title  ?>_product_meta_description">Türkçe Meta Description</label>
+														<input type="text" class="form-control" id="<?php echo $language->title  ?>_product_meta_description" name="<?php echo $language->title  ?>_product_meta_description" value="<?php echo isset($form_error) ? set_value("{$language->title}_product_meta_description") : ((isset($$dynamicVariableName->product_meta_description)) ? $$dynamicVariableName->product_meta_description : "") ?>">
 													
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-md-6 form-group " >
-														<label for="product_seo_url">Türkçe Seo Adresi</label>
-														<input type="text" class="form-control" id="product_seo_url" name="product_seo_url" value="<?php echo isset($form_error) ? set_value("product_seo_url") : ((isset($item1->product_seo_url)) ? $item1->product_seo_url : "") ?>">
+														<label for="<?php echo $language->title  ?>_product_seo_url">Türkçe Seo Adresi</label>
+														<input type="text" class="form-control" id="<?php echo $language->title  ?>_product_seo_url" name="<?php echo $language->title  ?>_product_seo_url" value="<?php echo isset($form_error) ? set_value("{$language->title}_product_seo_url") : ((isset($$dynamicVariableName->product_seo_url)) ? $$dynamicVariableName->product_seo_url : "") ?>">
 													
 													</div>
 												</div>
 												<div class="form-group">
 													<label for="exampleInputPassword1">Türkçe Ürün Açıklama</label>
-													<textarea name="product_description" class="m-0" data-plugin="summernote" data-options="{height: 250}"><?php echo isset($form_error) ? set_value("product_description") : ((isset($item1->product_description)) ? $item1->product_description : "") ?></textarea>
+													<textarea name="<?php echo $language->title  ?>_product_description" class="m-0" data-plugin="summernote" data-options="{height: 250}"><?php echo isset($form_error) ? set_value("<?php echo $language->title  ?>_product_description") : ((isset($$dynamicVariableName->product_description)) ? $$dynamicVariableName->product_description : "") ?></textarea>
 												</div>
 												<div class="row">
 													<div class="col-md-12 form-group " >
-														<label for="product_video_embed">Türkçe Video Embed Kodu</label>
-														<input type="text" class="form-control" id="product_video_embed" name="product_video_embed" value="<?php echo isset($form_error) ? set_value("product_video_embed") : ((isset($item1->product_video_embed)) ? $item1->product_video_embed : "") ?>">
+														<label for="<?php echo $language->title  ?>_product_video_embed">Türkçe Video Embed Kodu</label>
+														<input type="text" class="form-control" id="<?php echo $language->title  ?>_product_video_embed" name="<?php echo $language->title  ?>_product_video_embed" value="<?php echo isset($form_error) ? set_value("{$language->title}_product_video_embed") : ((isset($$dynamicVariableName->product_video_embed)) ? $$dynamicVariableName->product_video_embed : "") ?>">
 													
 													</div>
 												</div>
 											</div><!-- .tab-pane  -->
-											<div role="tabpanel" class="tab-pane fade en_container" id="tab-1">
-												<div class="row">
-													<div class="col-md-6 form-group <?php echo (isset($form_error) ? (empty(set_value("product_title")) ? "has-error" :"") : "") ?>" >
-														<label for="en_product_title"><span class="text-danger">*</span>Türkçe Ürün Başlık</label>
-														<input type="text" class="form-control" id="en_product_title" name="en_product_title" value="<?php echo isset($form_error) ? set_value("en_product_title") : ((isset($item2->product_title)) ? $item2->product_title : "") ?>">
-														<?php if(isset($form_error)): ?>
-														<small class="text-danger"><?php echo form_error("en_product_title"); ?></small>
-														<?php endif; ?>
-													</div>
-												</div>
-												<div class="row">
-													<div class="col-md-6 form-group" >
-														<label for="en_product_info_title">Türkçe Ürün Ek Bilgi Başlığı</label>
-														<input type="text" class="form-control" id="en_product_info_title" name="en_product_info_title" value="<?php echo isset($form_error) ? set_value("en_product_info_title") : ((isset($item2->product_info_title)) ? $item2->product_info_title : "") ?>">
-													
-													</div>
-												</div>
-												<div class="row">
-													<div class="col-md-6 form-group " >
-														<label for="en_product_info_description">Türkçe Ürün Ek Bilgi Açıklaması</label>
-														<input type="text" class="form-control" id="en_product_info_description" name="en_product_info_description" value="<?php echo isset($form_error) ? set_value("en_product_info_description") : ((isset($item2->product_info_description)) ? $item2->product_info_description : "") ?>">
-														
-													</div>
-												</div>
-												<div class="row">
-													<div class="col-md-6 form-group" >
-														<label for="en_product_meta_title">Türkçe Meta Title</label>
-														<input type="text" class="form-control" id="en_product_meta_title" name="en_product_meta_title" value="<?php echo isset($form_error) ? set_value("en_product_meta_title") : ((isset($item2->product_meta_title)) ? $item2->product_meta_title : "") ?>">
-													
-													</div>
-												</div>
-												<div class="row">
-													<div class="col-md-6 form-group " >
-														<label for="en_product_meta_keywords">Türkçe Meta Keywords</label>
-														<input type="text" class="form-control" id="en_product_meta_keywords" name="en_product_meta_keywords" value="<?php echo isset($form_error) ? set_value("en_product_meta_keywords") : ((isset($item2->product_meta_keywords)) ? $item2->product_meta_keywords : "") ?>">
-													
-													</div>
-												</div>
-												<div class="row">
-													<div class="col-md-6 form-group " >
-														<label for="en_product_meta_description">Türkçe Meta Description</label>
-														<input type="text" class="form-control" id="en_product_meta_description" name="en_product_meta_description" value="<?php echo isset($form_error) ? set_value("en_product_meta_description") : ((isset($item2->product_meta_description)) ? $item2->product_meta_description : "") ?>">
-													
-													</div>
-												</div>
-												<div class="row">
-													<div class="col-md-6 form-group " >
-														<label for="en_product_seo_url">Türkçe Seo Adresi</label>
-														<input type="text" class="form-control" id="en_product_seo_url" name="en_product_seo_url" value="<?php echo isset($form_error) ? set_value("en_product_seo_url") : ((isset($item2->product_seo_url)) ? $item2->product_seo_url : "") ?>">
-													
-													</div>
-												</div>
-												<div class="form-group">
-													<label for="exampleInputPassword1">Türkçe Ürün Açıklama</label>
-													<textarea name="en_product_description" class="m-0" data-plugin="summernote" data-options="{height: 250}"><?php echo isset($form_error) ? set_value("en_product_description") : ((isset($item2->product_description)) ? $item2->product_description : "") ?></textarea>
-												</div>
-												<div class="row">
-													<div class="col-md-12 form-group " >
-														<label for="en_product_video_embed">Türkçe Video Embed Kodu</label>
-														<input type="text" class="form-control" id="en_product_video_embed" name="en_product_video_embed" value="<?php echo isset($form_error) ? set_value("en_product_video_embed") : ((isset($item2->product_video_embed)) ? $item2->product_video_embed : "") ?>">
-													
-													</div>
-												</div>
-											</div><!-- .tab-pane  -->
-								
+										<?php endforeach; ?>
 									<div role="tabpanel" class="tab-pane fade" id="tab-2">
 										<div class="row">
 											<div class="col-md-6 form-group <?php echo (isset($form_error) ? (empty(set_value("product_code")) ? "has-error" :"") : "") ?>" >

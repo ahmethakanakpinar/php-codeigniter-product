@@ -4,24 +4,24 @@ $('#genel').on('click', function() {
         $(".language_select").val("1");
     }
 });
-   
+$(".EN_container").removeClass("in active")  
 if($(".language_select").val() === "2")
 {
-    $(".en_container").addClass("in active");
-    $(".tr_container").removeClass("in active")
+    $(".EN_container").addClass("in active");
+    $(".TR_container").removeClass("in active")
 }
 
    $(".language_select").change(function(){
         if($(this).val() === "1")
         {
-            $(".tr_container").addClass("in active");
-            $(".en_container").removeClass("in active")
+            $(".TR_container").addClass("in active");
+            $(".EN_container").removeClass("in active")
             
         }
         else if($(this).val() === "2")
         {
-            $(".en_container").addClass("in active");
-            $(".tr_container").removeClass("in active")
+            $(".EN_container").addClass("in active");
+            $(".TR_container").removeClass("in active")
         }
     })
  

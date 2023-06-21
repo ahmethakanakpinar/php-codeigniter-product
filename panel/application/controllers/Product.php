@@ -54,9 +54,8 @@ class Product extends CI_Controller {
   
 	public function save()
     {
-        $language = $this->product_model->get_all("product_language");
         $this->load->library("form_validation");
-        $this->form_validation->set_rules("product_title", "Ürün Adı", "required|trim");
+        $this->form_validation->set_rules("TR_product_title", "Ürün Adı", "required|trim");
         $this->form_validation->set_rules("product_code", "Üründ Kodu", "required|trim");
         $this->form_validation->set_rules("product_amount", "Miktar", "required|trim");
         $this->form_validation->set_rules("product_tl", "TL Fiyatı", "required|trim");
@@ -69,14 +68,11 @@ class Product extends CI_Controller {
         );
         $validate = $this->form_validation->run();
         echo $validate;
-   
+        // $validate = true;
         if ($validate) {
           
             $productData = $_POST;
-
-            foreach ($language as $count) {
-                $this->product_model->addProduct($productData, $count->id);
-            }
+            $this->product_model->addProduct($productData);
 
             if($_FILES["img_url"]["name"] == "")
             {
@@ -158,7 +154,7 @@ class Product extends CI_Controller {
     {
             $language = $this->product_model->get_all("product_language");
             $this->load->library("form_validation");
-            $this->form_validation->set_rules("product_title","Ürün Adı","required|trim");
+            $this->form_validation->set_rules("TR_product_title","Ürün Adı","required|trim");
             $this->form_validation->set_rules("product_code","Üründ Kodu","required|trim");
             $this->form_validation->set_rules("product_amount","Miktar","required|trim");
             $this->form_validation->set_rules("product_tl","TL Fiyatı","required|trim");
@@ -174,9 +170,7 @@ class Product extends CI_Controller {
             if($validate)
             {
                 $productData = $_POST;
-                foreach ($language as $count) {
-                    $this->product_model->updateProduct($id, $productData, $count->id);
-                }
+                $this->product_model->updateProduct($id, $productData);
 
                 if($_FILES["img_url"]["name"] != "")
                 {
