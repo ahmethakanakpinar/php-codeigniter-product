@@ -17,14 +17,10 @@ function get_readable_date($date)
     }
 }
 
-function image_upload($img_url,$turn)
+function image_upload($turn,$img_name="", $i=0)
 {
     $t = &get_instance();
-    $base64strcount = count($_POST["base64str"]);
-    for($i=0;$i<$base64strcount;$i++)
-    {
-        $image_name = time()."_".$i;
-        $img_name = CharConvert($image_name). "." ."png";
+
         if(isset($t->username))
         {
             $img_path = "uploads/$t->viewFolder/$t->username/$img_name";
@@ -61,7 +57,6 @@ function image_upload($img_url,$turn)
             redirect(base_url("{$t->viewTitle}/$turn"));
             die();
         }
-    }
 }
 
 function dinamicjoin($table_name = "", $column_name = "", $second_column_name = "", $second_table_name = "", $third_table_name = "", $fourth_table_name = "" )

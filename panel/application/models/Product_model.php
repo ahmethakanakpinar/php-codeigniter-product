@@ -53,23 +53,44 @@ class Product_model extends MY_Model
             "product_dolar" => $productData["product_dolar"],
             "product_euro"  => $productData["product_euro"]
         );
-
         $this->db->insert("product_currency", $currencyData);
 
 
-    }
-    public function addimage($file_name = "", $id = "")
-    {
-        $imageData = array(
-            "product_id"    => !empty($id) ? $id : $this->generalId,
-            "img_url"       => $file_name,
-            "createdAt"     => date("Y-m-d H:i:s")
-        );
+        if($this->input->post("base64str[]") != "")
+        {
+            $base64strcount = count($_POST["base64str"]);
+        
+            for($i=0;$i<$base64strcount;$i++)
+            {
+                $image_name = time()."_".$i;
+                $file_name = CharConvert($image_name). "." ."png";
+                image_upload("new_form", $file_name, $i);
+                $imageData = array(
+                    "product_id"    => $this->generalId,
+                    "img_url"       => $file_name,
+                    "createdAt"     => date("Y-m-d H:i:s")
+                );
+                $product_image_model = $this->db->insert("product_images", $imageData);
 
-        return $this->db->insert("product_images", $imageData);
-    }
+                if(!$product_image_model)
+                {
+                    $alert = array(
+                        "title" => "İşlem Başarısız",
+                        "text" => "Fotoğraf Ekleme sırasında bir problem oluştu",
+                        "type"  => "error"
+                    );
+                    $this->session->set_flashdata("alert", $alert);
+                    redirect(base_url("{$this->viewTitle}"));
+                    die();
+                }
+            }
+        }
 
-    public function updateProduct($id = "", $productData = array())
+      
+    }
+   
+
+    public function updateProduct($id = "", $productData = array(), $file_name = "")
     {
 
         $language = $this->product_model->get_all("product_language");
@@ -112,6 +133,37 @@ class Product_model extends MY_Model
             "product_euro"  => $productData["product_euro"]
         );
         $this->db->where("product_id", $id)->update("product_currency", $currencyData);
+
+        if($this->input->post("base64str[]") != "")
+        {
+            $base64strcount = count($_POST["base64str"]);
+        
+            for($i=0;$i<$base64strcount;$i++)
+            {
+                $image_name = time()."_".$i;
+                $file_name = CharConvert($image_name). "." ."png";
+                image_upload("update_form", $file_name, $i);
+                $imageData = array(
+                    "product_id"    => $id,
+                    "img_url"       => $file_name,
+                    "createdAt"     => date("Y-m-d H:i:s")
+                );
+                $product_image_model = $this->db->insert("product_images", $imageData);
+
+                if(!$product_image_model)
+                {
+                    $alert = array(
+                        "title" => "İşlem Başarısız",
+                        "text" => "Fotoğraf Ekleme sırasında bir problem oluştu",
+                        "type"  => "error"
+                    );
+                    $this->session->set_flashdata("alert", $alert);
+                    redirect(base_url("{$this->viewTitle}"));
+                    die();
+                }
+            }
+        }
+
     }
 }
 ?>

@@ -17,43 +17,39 @@ class Product extends CI_Controller {
 	}
 
 	public function index($id = 1)
-	{
+	{   
         $viewData = new stdClass();
-        $items = $this->product_model->get_all_join(
-            array("product_language" => $id
-        ));
-       
-        $viewData->items = $items;
-     
-        $viewData->product_language_id = $id;
-
-		// View'e gönderilecek olan değişkenlerin set edilmesi
-		$viewData->viewTitle = $this->viewTitle;
-        $product_language = $this->product_model->get_all("product_language");
-		$viewData->product_language = $product_language;
+        $items = $this->product_model->get_all_join(  
+            array("product_language" => $id     
+        ));                                    
+        $viewData->items = $items;  
+        $viewData->product_language_id = $id;   
+		$viewData->viewTitle = $this->viewTitle; 
+        $product_language = $this->product_model->get_all("product_language");   
+		$viewData->product_language = $product_language; 
         $viewData->viewFolder = $this->viewFolder;
-        $viewData->subViewFolder = "list";
+        $viewData->subViewFolder = "list"; 
 		$this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
-	}
-	public function new_form($id=0)
-	{
+	}   
+	public function new_form($id=0) 
+	{   
         $items = $this->product_model->get_all_join_id(array("language_id" => $id,));
         $img_url = $this->product_model->get_all("product_images", array("product_id" => $id));
 		$viewData = new stdClass();
-        $product_tax = $this->product_model->get_all("product_tax");
-		$viewData->product_tax = $product_tax;
-        $product_language = $this->product_model->get_all("product_language");
-		$viewData->product_language = $product_language;
+        $product_tax = $this->product_model->get_all("product_tax"); 
+		$viewData->product_tax = $product_tax; 
+        $product_language = $this->product_model->get_all("product_language"); 
+		$viewData->product_language = $product_language; 
 		$viewData->viewTitle = $this->viewTitle;
 		$viewData->viewFolder = $this->viewFolder;
 		$viewData->subViewFolder = "addupdate";
-        $viewData->items = $items;
-        $viewData->img_url = $img_url;
+        $viewData->items = $items;  
+        $viewData->img_url = $img_url; 
 		$this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
-	}
+	}  
   
 	public function save()
-    {
+    {   
         $this->load->library("form_validation");
         $this->form_validation->set_rules("TR_product_title", "Ürün Adı", "required|trim");
         $this->form_validation->set_rules("product_code", "Üründ Kodu", "required|trim");
@@ -73,59 +69,7 @@ class Product extends CI_Controller {
           
             $productData = $_POST;
             $this->product_model->addProduct($productData);
-
-            if($_FILES["img_url"]["name"] == "")
-            {
-                if($this->input->post("base64str[]") != "")
-                {
-                    $oldid = get_last_id("product_general");
-                    $base64strcount = count($_POST["base64str"]);
-                    image_upload("img_url","new_form");
-                    for($i=0;$i<$base64strcount;$i++)
-                    {
-                        // CharConvert(pathinfo($_FILES["img_url"]["name"], PATHINFO_FILENAME)). "." .pathinfo($_FILES["img_url"]["name"], PATHINFO_EXTENSION);
-                        $image_name = time()."_".$i;
-                        $file_name = CharConvert($image_name). "." ."png";
-                        $product_image_model = $this->product_model->addimage($file_name);
-                        if(!$product_image_model)
-                        {
-                            $alert = array(
-                                "title" => "İşlem Başarısız",
-                                "text" => "Fotoğraf Ekleme sırasında bir problem oluştu",
-                                "type"  => "error"
-                            );
-                            $this->session->set_flashdata("alert", $alert);
-                            redirect(base_url("{$this->viewTitle}"));
-                            die();
-                        }
-                    }
-                }
-
-            }
-            if($_FILES["img_url"]["name"] != "")
-            {
-                $base64strcount = count($_POST["base64str"]);
-                image_upload("img_url","new_form");
-                for($i=0;$i<$base64strcount;$i++)
-                {
-
-                    // CharConvert(pathinfo($_FILES["img_url"]["name"], PATHINFO_FILENAME)). "." .pathinfo($_FILES["img_url"]["name"], PATHINFO_EXTENSION);
-                    $image_name = time()."_".$i;
-                    $file_name = CharConvert($image_name). "." ."png";
-                    $product_image_model = $this->product_model->addimage($file_name);
-                    if(!$product_image_model)
-                    {
-                        $alert = array(
-                            "title" => "İşlem Başarısız",
-                            "text" => "Fotoğraf Ekleme sırasında bir problem oluştu",
-                            "type"  => "error"
-                        );
-                        $this->session->set_flashdata("alert", $alert);
-                        redirect(base_url("{$this->viewTitle}"));
-                        die();
-                    }
-                }
-            }
+            
             $alert = array(
                 "title" => "İşlem Başarılı",
                 "text" => "Kayıt başarılı bir şekilde eklendi",
@@ -171,59 +115,6 @@ class Product extends CI_Controller {
             {
                 $productData = $_POST;
                 $this->product_model->updateProduct($id, $productData);
-
-                if($_FILES["img_url"]["name"] != "")
-                {
-                    $base64strcount = count($_POST["base64str"]);
-                    empty($base64strcount)? 0 : $base64strcount;
-                    image_upload("img_url","update_form");
-                    for($i=0;$i<$base64strcount;$i++)
-                    {
-                        // CharConvert(pathinfo($_FILES["img_url"]["name"], PATHINFO_FILENAME)). "." .pathinfo($_FILES["img_url"]["name"], PATHINFO_EXTENSION);
-                        $image_name = time()."_".$i;
-                        $file_name = CharConvert($image_name). "." ."png";
-                        $product_image_model = $this->product_model->addimage($file_name, $id);
-                        if(!$product_image_model)
-                        {
-                            $alert = array(
-                                "title" => "İşlem Başarısız",
-                                "text" => "Fotoğraf Ekleme sırasında bir problem oluştu",
-                                "type"  => "error"
-                            );
-                            $this->session->set_flashdata("alert", $alert);
-                            redirect(base_url("{$this->viewTitle}"));
-                            die();
-                        }
-                    }
-                }
-                if($_FILES["img_url"]["name"] == "")
-                {
-                    if($this->input->post("base64str[]") != "")
-                    {
-                        $base64strcount = count($_POST["base64str"]);
-                        image_upload("img_url","new_form");
-                        for($i=0;$i<$base64strcount;$i++)
-                        {
-                            // CharConvert(pathinfo($_FILES["img_url"]["name"], PATHINFO_FILENAME)). "." .pathinfo($_FILES["img_url"]["name"], PATHINFO_EXTENSION);
-                            $image_name = time()."_".$i;
-                            $file_name = CharConvert($image_name). "." ."png";
-                            $product_image_model = $this->product_model->addimage($_POST, $file_name, $id);
-                            if(!$product_image_model)
-                            {
-                                $alert = array(
-                                    "title" => "İşlem Başarısız",
-                                    "text" => "Fotoğraf Ekleme sırasında bir problem oluştu",
-                                    "type"  => "error"
-                                );
-                                $this->session->set_flashdata("alert", $alert);
-                                redirect(base_url("{$this->viewTitle}"));
-                                die();
-                            }
-                        }
-                    }
-
-                }
-
                 $alert = array(
                 "title" => "İşlem Başarılı",
                 "text" => "Kayıt başarılı bir şekilde eklendi",
